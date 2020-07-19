@@ -6,6 +6,6 @@ function sys = zpk_time(t_z, t_p, k)
 
 z = -1./ t_z;
 p = -1./ t_p;
-k = k * abs( prod(t_z) * prod (t_p));
+k = k * prod(t_z) / prod (t_p);
 
 sys = zpk(z, p, k);
