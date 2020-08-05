@@ -14,14 +14,14 @@ K = pidstd(1.14, 12.7); % a PI
 L = series(K, G);
 L = G*K; % equivalent, just for reference
 
+%% Analyze
+
 % Feedback loop TF, i.e. Complementary Sensitivity Function
 y = AnalysisPoint('y'); % for use in sensitivity function
 T = feedback(y*L,1);
 
 % Error dynamics, i.e. Sensitivity function
 S = getSensitivity(T, 'y');
-
-%% Analyze
 
 % Get poles and zeros
 [z_p, p_p] = zpkdata_siso(T)
@@ -38,7 +38,22 @@ step(T, t_final)
 % computed for the OL system
 [Gm, Pm, Wcg, Wcp] = margin(L)
 
-%% Continue on 2.4.3
+% Bode plot
+f2 = figure(2);
+bodeplot(L,T,S,custom_bodeoptions())
+bode_legend(f2, 'Open Loop', 'Closed Loop', 'Sensitivity')
+
+% Relationship of the Complementary Sensitivity and Sensitivity with
+% M-circles and Nicholds Grids. These show gain peaks in the close loop
+% system, i.e. M_T
+figure(3)
+nyquist(L)
+grid on
+axis([-1.6 0 -2 2]);
+
+figure(4)
+nichols(L)
+grid on
 
 
 
