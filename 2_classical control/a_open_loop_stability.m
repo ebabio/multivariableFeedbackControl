@@ -8,18 +8,22 @@ addpath(fullfile(pwd, 'lib'));
 
 %% Define System
 
-sys = zpk_time(-2, [5, 10], 3);
-
+% A stabl system with a RHP zero, from Skogestad, section 2.3
+G = zpk_time(-2, [5, 10], 3);
 
 %% Show properties
 
-[z, p, k] = zpkdata_siso(sys)
+% Get Zeros and Poles
+[z, p, k] = zpkdata_siso(G)
 
+% Plot the pole/zeros
 figure(1)
-pzmap(sys)
+pzmap(G)
 
+% Bode Plot
 figure(2)
-bodeplot(sys)
+bodeplot(G)
 
+% Nyquist Diagram
 figure(3)
-nyquist(sys)
+nyquist(G)
