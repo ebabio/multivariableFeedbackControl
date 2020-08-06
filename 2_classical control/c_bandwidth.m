@@ -3,6 +3,9 @@
 close all
 clc
 
+% Add Library
+addpath(fullfile(pwd, 'lib'));
+
 %% Define system
 
 % System parameters

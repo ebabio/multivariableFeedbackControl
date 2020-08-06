@@ -4,6 +4,9 @@ a_open_loop_stability
 close all
 clc
 
+% Add Library
+addpath(fullfile(pwd, 'lib'));
+
 %% Define a Control
 
 % Add a controller in standard form

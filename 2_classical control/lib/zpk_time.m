@@ -4,7 +4,7 @@ function sys = zpk_time(t_z, t_p, k)
 %   T_P characteristic time for poles, negative time for RHP poles
 %   K gain
 
-if(nargin<2)
+if(nargin<3)
     k = 1;
 end
 
