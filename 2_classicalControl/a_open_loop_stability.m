@@ -4,7 +4,8 @@ clear
 clc
 
 % Add Library
-addpath(fullfile(pwd, 'lib'));
+lib_path = fullfile(fileparts(mfilename('fullpath')), '..', '0_lib');
+remote_feval(lib_path, 'init_libs');
 
 %% Define System
 
