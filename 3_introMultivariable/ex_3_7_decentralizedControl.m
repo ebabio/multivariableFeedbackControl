@@ -1,5 +1,8 @@
 %% Ex 3.7: A decentralized control
 
+% This exercise 3.7 following the paper book, not the computer pdf which is
+% different for this case.
+
 %% Setup Workspace
 
 clear
@@ -13,7 +16,7 @@ remote_feval(lib_path, 'init_libs');
 %% System definition
 
 % tunable parameter
-theta = 5;
+theta = 5; % use theta 5 for long delay, theta 1 for short delay
 
 % transfer function
 s = tf('s');
@@ -48,3 +51,41 @@ rga_number_default = @(G) (rga_number(G, pairing));
 [r, rga_number_bode] = over_freq(G, omega_range, rga_number_default);
 figure(3)
 bodeplot(rga_number_bode, omega_range)
+
+%% Controller Definition
+
+% controller simplification, based on SIMC rules, and the half rule
+g_tuning(1,1) = exp((-theta) * s) * (-34.54 * 1e-2) / ((1+2.16)* s); % correcting the value in the book
+g_tuning(1,2) = exp((-theta - 2.16) * s) * (1.913  * 1e-2) / s; % half the second pole added to delay
+g_tuning(2,1) = exp(-theta*s) * (-30.22 * 1e-2) / (4.32 * s + 1);
+g_tuning(2,2) = exp(-theta*s) * (-9.188 * 1e-2) / (4.32 * s + 1);
+
+% bandwidth definition based on time
+tc1 = 3*theta; % improves robustness of the controller to decrease bandwidth here, base don the book
+tc2 = theta;
+
+%Diagonal pairing
+k11 = 1/(-34.54 * 1e-2) * ((1+2.16) / (tc1+theta)) * (1 + 1 / (4 * (tc1+theta)* s));
+k22 = 1/(-9.188 * 1e-2) * (4.32 / (tc2+theta)) * (1 + 1/(4.32*s));
+
+K = [k11, 0 ; 0, k22];
+
+%Off-diagonal pairing: output 1 to input 2
+k21 = 1/(1.913  * 1e-2) * (1 / (tc1 + theta + 2.16)) * (1 + 1 / (4 * (tc1 + theta + 2.16)* s));
+k12 = 1/(-30.22 * 1e-2) * (4.32 / (tc2+theta)) * (1 + 1/(4.32*s));
+
+K = [0, k12 ; k21, 0];
+
+%% Analyze controller response
+
+% Use diagonal or off diagonal pairing, based on values of the rga matrix,
+% for high theta the off-diagonal will work better since the bandwidth is
+% lower since the off-diagonal rgas are closer to 1, and viceversa
+
+% Define Open Loop System
+L = G * K;
+
+% Get sensitivities
+T = feedback(L, eye(2));
+
+step(T)
