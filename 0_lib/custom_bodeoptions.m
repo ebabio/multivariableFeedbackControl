@@ -3,6 +3,6 @@ function opts = custom_bodeoptions()
 
 opts = bodeoptions;
 
-opts.FreqUnits = 'Hz';
+% opts.FreqUnits = 'Hz';
 opts.Grid = 'on';
 
