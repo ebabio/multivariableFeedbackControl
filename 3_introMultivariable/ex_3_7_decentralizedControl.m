@@ -1,6 +1,6 @@
 %% Ex 3.7: A decentralized control
 
-% This exercise 3.7 following the paper book, not the computer pdf which is
+% This is exercise 3.7 following the paper book, not the computer pdf which is
 % different for this case.
 
 %% Setup Workspace
